@@ -1,11 +1,17 @@
 package org.example;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello World");
+        System.out.println("Hello");
     }
 
-    public static String incrementEndpoint(String endpoint, int increment) {
+    public static String incrementAndCheckEndpoint(String endpoint, int increment, boolean isPageExists) {
 
         if (endpoint.matches(".*/page/\\d+.*")) {
             //Достаём текущий номер страницы
@@ -13,7 +19,18 @@ public class Main {
             int newPage = currentPage + increment;
 
             // Заменяем текущий номер страницы новым
-            return endpoint.replaceFirst("/page/\\d+", "/page/" + newPage);
+            endpoint = endpoint.replaceFirst("/page/\\d+", "/page/" + newPage);
+        }
+
+        //Проверяем существование веб-страницы
+        try {
+            URL url = new URL(endpoint);
+            HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+            int responseCode = huc.getResponseCode();
+            assertEquals(isPageExists ? HttpURLConnection.HTTP_OK : HttpURLConnection.HTTP_NOT_FOUND, responseCode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return endpoint;

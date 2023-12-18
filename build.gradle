@@ -10,9 +10,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    implementation 'org.apache.commons:commons-lang3:3.14.0' // Use the latest version available
+    implementation platform('org.junit:junit-bom:5.9.1')
+    implementation 'org.junit.jupiter:junit-jupiter'
 }
 
 test {
