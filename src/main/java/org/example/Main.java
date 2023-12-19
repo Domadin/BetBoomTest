@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -25,13 +26,17 @@ public class Main {
                 "Допускается наличие query параметров");
 
         //Проверяем существование веб-страницы
+        checkUrlExistence(endpoint);
+
+        return endpoint;
+    }
+
+    private static void checkUrlExistence(String endpoint) throws IOException {
         URL url = new URL(endpoint);
         HttpURLConnection huc = (HttpURLConnection) url.openConnection();
         int responseCode = huc.getResponseCode();
         if (HttpURLConnection.HTTP_NOT_FOUND == responseCode)
             System.out.println("Данной страницы не существует - " + endpoint);
-        //assertEquals(isPageExists ? HttpURLConnection.HTTP_OK : HttpURLConnection.HTTP_NOT_FOUND, responseCode);
-
-        return endpoint;
+        else assertEquals(HttpURLConnection.HTTP_OK, responseCode);
     }
 }
